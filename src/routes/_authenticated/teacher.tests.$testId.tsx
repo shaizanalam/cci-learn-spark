@@ -48,7 +48,16 @@ function TestEditor() {
 
   async function addQuestion() {
     if (!draft.question_text.trim()) return toast.error("Question text required");
-    let payload: { type: QType; question_text: string; options: unknown; correct_answer: unknown; marks: number; test_id: string; display_order: number } = {
+    type Insert = {
+      type: QType;
+      question_text: string;
+      options: unknown;
+      correct_answer: unknown;
+      marks: number;
+      test_id: string;
+      display_order: number;
+    };
+    let payload: Insert = {
       type: draft.type,
       question_text: draft.question_text.trim(),
       options: null,

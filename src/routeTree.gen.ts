@@ -16,11 +16,16 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTeacherRouteImport } from './routes/_authenticated/teacher'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedTeacherIndexRouteImport } from './routes/_authenticated/teacher.index'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
+import { Route as AuthenticatedTeacherTestsRouteImport } from './routes/_authenticated/teacher.tests'
+import { Route as AuthenticatedTeacherMaterialsRouteImport } from './routes/_authenticated/teacher.materials'
+import { Route as AuthenticatedTeacherAttendanceRouteImport } from './routes/_authenticated/teacher.attendance'
 import { Route as AuthenticatedAppTestsRouteImport } from './routes/_authenticated/app.tests'
 import { Route as AuthenticatedAppResultsRouteImport } from './routes/_authenticated/app.results'
 import { Route as AuthenticatedAppProfileRouteImport } from './routes/_authenticated/app.profile'
 import { Route as AuthenticatedAppMaterialsRouteImport } from './routes/_authenticated/app.materials'
+import { Route as AuthenticatedTeacherTestsTestIdRouteImport } from './routes/_authenticated/teacher.tests.$testId'
 
 const PendingRoute = PendingRouteImport.update({
   id: '/pending',
@@ -56,11 +61,35 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedTeacherIndexRoute =
+  AuthenticatedTeacherIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedTeacherRoute,
+  } as any)
 const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedTeacherTestsRoute =
+  AuthenticatedTeacherTestsRouteImport.update({
+    id: '/tests',
+    path: '/tests',
+    getParentRoute: () => AuthenticatedTeacherRoute,
+  } as any)
+const AuthenticatedTeacherMaterialsRoute =
+  AuthenticatedTeacherMaterialsRouteImport.update({
+    id: '/materials',
+    path: '/materials',
+    getParentRoute: () => AuthenticatedTeacherRoute,
+  } as any)
+const AuthenticatedTeacherAttendanceRoute =
+  AuthenticatedTeacherAttendanceRouteImport.update({
+    id: '/attendance',
+    path: '/attendance',
+    getParentRoute: () => AuthenticatedTeacherRoute,
+  } as any)
 const AuthenticatedAppTestsRoute = AuthenticatedAppTestsRouteImport.update({
   id: '/tests',
   path: '/tests',
@@ -82,6 +111,12 @@ const AuthenticatedAppMaterialsRoute =
     path: '/materials',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedTeacherTestsTestIdRoute =
+  AuthenticatedTeacherTestsTestIdRouteImport.update({
+    id: '/$testId',
+    path: '/$testId',
+    getParentRoute: () => AuthenticatedTeacherTestsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,24 +124,33 @@ export interface FileRoutesByFullPath {
   '/pending': typeof PendingRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
-  '/teacher': typeof AuthenticatedTeacherRoute
+  '/teacher': typeof AuthenticatedTeacherRouteWithChildren
   '/app/materials': typeof AuthenticatedAppMaterialsRoute
   '/app/profile': typeof AuthenticatedAppProfileRoute
   '/app/results': typeof AuthenticatedAppResultsRoute
   '/app/tests': typeof AuthenticatedAppTestsRoute
+  '/teacher/attendance': typeof AuthenticatedTeacherAttendanceRoute
+  '/teacher/materials': typeof AuthenticatedTeacherMaterialsRoute
+  '/teacher/tests': typeof AuthenticatedTeacherTestsRouteWithChildren
   '/app/': typeof AuthenticatedAppIndexRoute
+  '/teacher/': typeof AuthenticatedTeacherIndexRoute
+  '/teacher/tests/$testId': typeof AuthenticatedTeacherTestsTestIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/pending': typeof PendingRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/teacher': typeof AuthenticatedTeacherRoute
   '/app/materials': typeof AuthenticatedAppMaterialsRoute
   '/app/profile': typeof AuthenticatedAppProfileRoute
   '/app/results': typeof AuthenticatedAppResultsRoute
   '/app/tests': typeof AuthenticatedAppTestsRoute
+  '/teacher/attendance': typeof AuthenticatedTeacherAttendanceRoute
+  '/teacher/materials': typeof AuthenticatedTeacherMaterialsRoute
+  '/teacher/tests': typeof AuthenticatedTeacherTestsRouteWithChildren
   '/app': typeof AuthenticatedAppIndexRoute
+  '/teacher': typeof AuthenticatedTeacherIndexRoute
+  '/teacher/tests/$testId': typeof AuthenticatedTeacherTestsTestIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,12 +160,17 @@ export interface FileRoutesById {
   '/pending': typeof PendingRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
-  '/_authenticated/teacher': typeof AuthenticatedTeacherRoute
+  '/_authenticated/teacher': typeof AuthenticatedTeacherRouteWithChildren
   '/_authenticated/app/materials': typeof AuthenticatedAppMaterialsRoute
   '/_authenticated/app/profile': typeof AuthenticatedAppProfileRoute
   '/_authenticated/app/results': typeof AuthenticatedAppResultsRoute
   '/_authenticated/app/tests': typeof AuthenticatedAppTestsRoute
+  '/_authenticated/teacher/attendance': typeof AuthenticatedTeacherAttendanceRoute
+  '/_authenticated/teacher/materials': typeof AuthenticatedTeacherMaterialsRoute
+  '/_authenticated/teacher/tests': typeof AuthenticatedTeacherTestsRouteWithChildren
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
+  '/_authenticated/teacher/': typeof AuthenticatedTeacherIndexRoute
+  '/_authenticated/teacher/tests/$testId': typeof AuthenticatedTeacherTestsTestIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,19 +185,28 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/results'
     | '/app/tests'
+    | '/teacher/attendance'
+    | '/teacher/materials'
+    | '/teacher/tests'
     | '/app/'
+    | '/teacher/'
+    | '/teacher/tests/$testId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/pending'
     | '/admin'
-    | '/teacher'
     | '/app/materials'
     | '/app/profile'
     | '/app/results'
     | '/app/tests'
+    | '/teacher/attendance'
+    | '/teacher/materials'
+    | '/teacher/tests'
     | '/app'
+    | '/teacher'
+    | '/teacher/tests/$testId'
   id:
     | '__root__'
     | '/'
@@ -162,7 +220,12 @@ export interface FileRouteTypes {
     | '/_authenticated/app/profile'
     | '/_authenticated/app/results'
     | '/_authenticated/app/tests'
+    | '/_authenticated/teacher/attendance'
+    | '/_authenticated/teacher/materials'
+    | '/_authenticated/teacher/tests'
     | '/_authenticated/app/'
+    | '/_authenticated/teacher/'
+    | '/_authenticated/teacher/tests/$testId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,12 +286,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/teacher/': {
+      id: '/_authenticated/teacher/'
+      path: '/'
+      fullPath: '/teacher/'
+      preLoaderRoute: typeof AuthenticatedTeacherIndexRouteImport
+      parentRoute: typeof AuthenticatedTeacherRoute
+    }
     '/_authenticated/app/': {
       id: '/_authenticated/app/'
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
       parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/teacher/tests': {
+      id: '/_authenticated/teacher/tests'
+      path: '/tests'
+      fullPath: '/teacher/tests'
+      preLoaderRoute: typeof AuthenticatedTeacherTestsRouteImport
+      parentRoute: typeof AuthenticatedTeacherRoute
+    }
+    '/_authenticated/teacher/materials': {
+      id: '/_authenticated/teacher/materials'
+      path: '/materials'
+      fullPath: '/teacher/materials'
+      preLoaderRoute: typeof AuthenticatedTeacherMaterialsRouteImport
+      parentRoute: typeof AuthenticatedTeacherRoute
+    }
+    '/_authenticated/teacher/attendance': {
+      id: '/_authenticated/teacher/attendance'
+      path: '/attendance'
+      fullPath: '/teacher/attendance'
+      preLoaderRoute: typeof AuthenticatedTeacherAttendanceRouteImport
+      parentRoute: typeof AuthenticatedTeacherRoute
     }
     '/_authenticated/app/tests': {
       id: '/_authenticated/app/tests'
@@ -258,6 +349,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppMaterialsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/teacher/tests/$testId': {
+      id: '/_authenticated/teacher/tests/$testId'
+      path: '/$testId'
+      fullPath: '/teacher/tests/$testId'
+      preLoaderRoute: typeof AuthenticatedTeacherTestsTestIdRouteImport
+      parentRoute: typeof AuthenticatedTeacherTestsRoute
+    }
   }
 }
 
@@ -280,16 +378,47 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
 const AuthenticatedAppRouteWithChildren =
   AuthenticatedAppRoute._addFileChildren(AuthenticatedAppRouteChildren)
 
+interface AuthenticatedTeacherTestsRouteChildren {
+  AuthenticatedTeacherTestsTestIdRoute: typeof AuthenticatedTeacherTestsTestIdRoute
+}
+
+const AuthenticatedTeacherTestsRouteChildren: AuthenticatedTeacherTestsRouteChildren =
+  {
+    AuthenticatedTeacherTestsTestIdRoute: AuthenticatedTeacherTestsTestIdRoute,
+  }
+
+const AuthenticatedTeacherTestsRouteWithChildren =
+  AuthenticatedTeacherTestsRoute._addFileChildren(
+    AuthenticatedTeacherTestsRouteChildren,
+  )
+
+interface AuthenticatedTeacherRouteChildren {
+  AuthenticatedTeacherAttendanceRoute: typeof AuthenticatedTeacherAttendanceRoute
+  AuthenticatedTeacherMaterialsRoute: typeof AuthenticatedTeacherMaterialsRoute
+  AuthenticatedTeacherTestsRoute: typeof AuthenticatedTeacherTestsRouteWithChildren
+  AuthenticatedTeacherIndexRoute: typeof AuthenticatedTeacherIndexRoute
+}
+
+const AuthenticatedTeacherRouteChildren: AuthenticatedTeacherRouteChildren = {
+  AuthenticatedTeacherAttendanceRoute: AuthenticatedTeacherAttendanceRoute,
+  AuthenticatedTeacherMaterialsRoute: AuthenticatedTeacherMaterialsRoute,
+  AuthenticatedTeacherTestsRoute: AuthenticatedTeacherTestsRouteWithChildren,
+  AuthenticatedTeacherIndexRoute: AuthenticatedTeacherIndexRoute,
+}
+
+const AuthenticatedTeacherRouteWithChildren =
+  AuthenticatedTeacherRoute._addFileChildren(AuthenticatedTeacherRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedAppRoute: typeof AuthenticatedAppRouteWithChildren
-  AuthenticatedTeacherRoute: typeof AuthenticatedTeacherRoute
+  AuthenticatedTeacherRoute: typeof AuthenticatedTeacherRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedAppRoute: AuthenticatedAppRouteWithChildren,
-  AuthenticatedTeacherRoute: AuthenticatedTeacherRoute,
+  AuthenticatedTeacherRoute: AuthenticatedTeacherRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
