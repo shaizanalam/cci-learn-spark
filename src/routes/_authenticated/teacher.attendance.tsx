@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { CheckCheck, X } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/teacher/attendance")({
-  component: TeacherAttendance;
+  component: TeacherAttendance,
 });
 
 function TeacherAttendance() {
