@@ -80,7 +80,8 @@ function TestEditor() {
       payload = { ...payload, options: null, correct_answer: { value: draft.correct[0] === "true" } };
     }
 
-    const { error } = await supabase.from("questions").insert(payload as Parameters<typeof supabase.from<"questions">>[0] extends never ? never : never as never);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await supabase.from("questions").insert(payload as any);
     if (error) return toast.error(error.message);
     toast.success("Question added");
     setDraft({ type: "mcq", question_text: "", options: ["", "", "", ""], correct: [], marks: 1 });
